@@ -15,7 +15,7 @@ IntList colori = new IntList();
 
 // File management
 String path;
-File[] files;
+String[] filenames;
 
 void setup() {
   background(255);
@@ -28,15 +28,18 @@ void setup() {
   }
   // READ FILES IN THE DIRECTORY
   path = sketchPath() + "/input/";
-  files = listFiles(path);
+  filenames = listFileNames(path);
+  printArray(filenames);
 }
 
 void draw() {
+  if(filenames.length == 0) {
+    exit();
+  }
   //for (int inter = 0; inter <= interations; inter++) {
-  for (int inter = 0; inter < files.length; inter++) {
-    File f = files[inter]; 
+  for (int inter = 0; inter < filenames.length; inter++) {
     PImage img;
-    img = loadImage(path + f.getName());
+    img = loadImage(path + filenames[inter]);
     if(img.width > img.height) {
       img.resize(0, height);
     } else {
@@ -72,7 +75,7 @@ void draw() {
     }
     outputImage.endDraw();
     image(outputImage, 0, 0);
-    outputImage.save("output/"+ f.getName());
+    outputImage.save("output/"+ filenames[inter]);
     outputImage.clear();
   }
   exit();

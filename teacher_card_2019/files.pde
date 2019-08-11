@@ -1,11 +1,19 @@
 // This code was copy-pasted from:
 // https://processing.org/examples/directorylist.html
 
+import java.io.FilenameFilter;
+ 
+static final FilenameFilter FILTER = new FilenameFilter() {
+  @ Override boolean accept(File path, String name) {
+    return !name.equals(".DS_Store");
+  }
+};
+
 // This function returns all the files in a directory as an array of Strings  
 String[] listFileNames(String dir) {
   File file = new File(dir);
   if (file.isDirectory()) {
-    String names[] = file.list();
+    String names[] = file.list(FILTER);
     return names;
   } else {
     // If it's not a directory
