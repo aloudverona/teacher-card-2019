@@ -6,7 +6,6 @@
  */
 PGraphics outputImage;
 
-int interations = 0;
 // MUSICA:
 color c = color(233, 83, 78);
 // TECH:
@@ -33,6 +32,7 @@ void setup() {
 }
 
 void draw() {
+  //for (int inter = 0; inter <= interations; inter++) {
   for (int inter = 0; inter < files.length; inter++) {
     File f = files[inter]; 
     PImage img;
@@ -42,7 +42,6 @@ void draw() {
     } else {
       img.resize(width, 0);
     }
-  //for (int inter = 0; inter <= interations; inter++) {
     outputImage.beginDraw();
     outputImage.noStroke();
     outputImage.image(img, 0, 0);
