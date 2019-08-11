@@ -47,7 +47,7 @@ void draw() {
     }
     outputImage.beginDraw();
     outputImage.noStroke();
-    outputImage.image(img, 0, 0);
+    outputImage.image(img, -img.width/4, 0);
     outputImage.fill(colori.get(0));
     // First rect
     outputImage.rect(0, 0, width/2, height/2);
