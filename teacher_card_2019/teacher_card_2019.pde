@@ -27,8 +27,8 @@ void setup() {
   // BASIC SETUP
   background(255);
   size(600, 600);
-  pixelDensity(2);
   surface.setResizable(true);
+  pixelDensity(2);
   // SET COLOR MODE
   colorMode(HSB, 360, 100, 100); 
   // SELECT THE INPUT FOLDER
@@ -46,12 +46,18 @@ void draw() {
 }
 
 void createImage() {
+  if (filenames.length == 0 || avanzamento >= filenames.length) {
+    exit();
+  }
+  println(width);
+  println(height);
+  background(255);
   PImage img;
   img = loadImage(path + filenames[avanzamento]);
   if (img.width > img.height) {
-    img.resize(0, height);
+    img.resize(0, height + 200);
   } else {
-    img.resize(width, 0);
+    img.resize(width + 200, 0);
   }
 
   noStroke();
@@ -146,10 +152,10 @@ void keyPressed() {
   }
   // Save
   if (key == 's') {
-    saveFrame(path+"/output/"+ filenames[avanzamento]);
+    saveFrame(sketchPath()+"/output/" + width*2 + "_" + height*2+"_"+ filenames[avanzamento]);
   }
   if (key == 'i') { 
-    surface.setSize(540, 960);
+    surface.setSize(270, 480);
   }
   if (key == 'f') {
     surface.setSize(600, 600);

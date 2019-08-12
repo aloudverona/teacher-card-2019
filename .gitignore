@@ -7,3 +7,5 @@ application.windows64
 application.macosx
 /teacher_card_2019/input/*
 /teacher_card_2019/output/*
+/teacher_card_2019/todo/*
+/teacher_card_2019/done/*
