@@ -2,7 +2,7 @@
 // https://processing.org/examples/directorylist.html
 
 import java.io.FilenameFilter;
- 
+
 static final FilenameFilter FILTER = new FilenameFilter() {
   @ Override boolean accept(File path, String name) {
     return !name.equals(".DS_Store");

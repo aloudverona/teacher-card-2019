@@ -4,16 +4,14 @@
  * date: 09.08.2019
  * www.aloudverona.it
  */
-PGraphics outputImage;
-
-// MUSICA:
-// color c = color(233, 83, 78);
-// TECH:
-//color c = color(42, 178, 162);
-// DIPLOMI:
-//color c = color(15, 167, 219);
-// DIZIONE:
-color c = color(134, 110, 174);
+color c;
+color palette[] = {
+  color(233, 83, 78), // Musica
+  color(42, 178, 162), // Tech
+  color(15, 167, 219), // Diplomi
+  color(134, 110, 174), // Dizione
+  color(252, 202, 51), // Progetti
+};
 // Creo un'IntList per creare le palette dei colori e per poterle riordinare
 IntList colori = new IntList();
 
@@ -21,68 +19,158 @@ IntList colori = new IntList();
 String path;
 String[] filenames;
 
+// Controls and positions
+int avanzamento = 0;
+int xPos = 0, yPos = 0;
+
 void setup() {
+  // BASIC SETUP
   background(255);
-  size(1200, 1200);
-  colorMode(HSB, 360, 100, 100);
-  outputImage = createGraphics(width, height, JAVA2D);
-  for (int i = 0; i < 4; i++) {
-    color c1 = color(hue(c), saturation(c) - (10*i), brightness(c));
-    colori.append(c1);
-  }
-  // READ FILES IN THE DIRECTORY
-  path = sketchPath() + "/input/";
-  filenames = listFileNames(path);
-  printArray(filenames);
+  size(600, 600);
+  pixelDensity(2);
+  surface.setResizable(true);
+  // SET COLOR MODE
+  colorMode(HSB, 360, 100, 100); 
+  // SELECT THE INPUT FOLDER
+  selectFolder("Select a folder to process:", "folderSelected");
+  // DRAW INSTRUCTIONS
+  fill(0);
+  text("Istruzioni:\n\nR: Refresh\nN: Next\nP: Previous\nS: Save\nI: Formato Instagram (Verticale)\nF: Formato Facebook (Quadrato)\nFrecce: riposiziona l'immagine di sfonto\nColor: 1 Musica, 2 Tecnologia, 3 Diplomi, 4 Dizione, 5 Progetti\n\nOra premi R per cominciare", 50, 50);
+  noFill(); 
+  // CREATE THE FIRST COLOR PALETTE
+  c = palette[0];
+  changePalette();
 }
 
 void draw() {
-  if(filenames.length == 0) {
-    exit();
+}
+
+void createImage() {
+  PImage img;
+  img = loadImage(path + filenames[avanzamento]);
+  if (img.width > img.height) {
+    img.resize(0, height);
+  } else {
+    img.resize(width, 0);
   }
-  //for (int inter = 0; inter <= interations; inter++) {
-  for (int inter = 0; inter < filenames.length; inter++) {
-    PImage img;
-    img = loadImage(path + filenames[inter]);
-    if(img.width > img.height) {
-      img.resize(0, height);
-    } else {
-      img.resize(width, 0);
-    }
-    outputImage.beginDraw();
-    outputImage.noStroke();
-    outputImage.image(img, -img.width/4, 0);
-    outputImage.fill(colori.get(0));
+
+  noStroke();
+  image(img, xPos, yPos);
+  fill(c);
+  // IF WE HAVE A SQUARE IMAGE
+  if (width == height) {
     // First rect
-    outputImage.rect(0, 0, width/2, height/2);
+    rect(0, 0, width/2, height/2);
     // Second rect
     if (random(1) >= 0.5) {
-      outputImage.fill(getColor(random(colori.size())));
-      outputImage.rect(0, height/2, width/4, height/4);
-      outputImage.fill(getColor(random(colori.size())));
-      outputImage.rect(width/4, height/2 + height/4, width/4, height/4);
+      fill(getColor(random(colori.size())));
+      rect(0, height/2, width/4, height/4);
+      fill(getColor(random(colori.size())));
+      rect(width/4, height/2 + height/4, width/4, height/4);
     } else {
-      outputImage.fill(getColor(random(colori.size())));
-      outputImage.rect(width/4, height/2, width/4, height/4);
-      outputImage.fill(getColor(random(colori.size())));
-      outputImage.rect(0, height/2 + height/4, width/4, height/4);
+      fill(getColor(random(colori.size())));
+      rect(width/4, height/2, width/4, height/4);
+      fill(getColor(random(colori.size())));
+      rect(0, height/2 + height/4, width/4, height/4);
     }
     // Last rect
     for (int i = 0; i < 4; i++) {
       colori.shuffle();
       for (int j = 0; j < 4; j++) {
         if (random(1) > 0.5) {
-          outputImage.fill(colori.get(j));
-          outputImage.rect(width/2 + (width/8*j), height/2 + (height/8*i), width/8, height/8);
+          fill(colori.get(j));
+          rect(width/2 + (width/8*j), height/2 + (height/8*i), width/8, height/8);
         }
       }
     }
-    outputImage.endDraw();
-    image(outputImage, 0, 0);
-    outputImage.save("output/"+ filenames[inter]);
-    outputImage.clear();
+  } else {
+    for (int i = 0; i < 4; i++) {
+      colori.shuffle();
+      for (int j = 0; j < 4; j++) {
+        if (random(1) > 0.5) {
+          fill(colori.get(j));
+          rect(0 + (width/4*j), height/2 + (height/8*i), width/4, height/8);
+        }
+      }
+    }
   }
-  exit();
+}
+
+void keyPressed() {
+  // Palette
+  if (key == '1') {
+    c = palette[0];
+    changePalette();
+  }
+  if (key == '2') {
+    c = palette[1];
+    changePalette();
+  }
+  if (key == '3') {
+    c = palette[2];
+    changePalette();
+  }
+  if (key == '4') {
+    c = palette[3];
+    changePalette();
+  }
+  if (key == '5') {
+    c = palette[4];
+    changePalette();
+  }
+  // Refresh
+  if (key == 'r') {
+    createImage();
+  }
+  // Previous
+  if (key == 'p') {
+    if (avanzamento > 0) {
+      avanzamento--;
+      background(0);
+      createImage();
+    } else {
+      exit();
+    }
+  }
+  // Next
+  if (key == 'n') {
+    if (avanzamento < filenames.length) {
+      avanzamento++;
+      background(0);
+      createImage();
+      xPos = 0;
+      yPos = 0;
+    } else {
+      exit();
+    }
+  }
+  // Save
+  if (key == 's') {
+    saveFrame(path+"/output/"+ filenames[avanzamento]);
+  }
+  if (key == 'i') { 
+    surface.setSize(540, 960);
+  }
+  if (key == 'f') {
+    surface.setSize(600, 600);
+  }
+  // MOVE BACKGROUND IMAGE
+  if (key == CODED) {
+    if (keyCode == UP) {
+      yPos -= 50;
+      createImage();
+    } else if (keyCode == DOWN) {
+      yPos += 50;
+      createImage();
+    }
+    if (keyCode == LEFT) {
+      xPos -= 50;
+      createImage();
+    } else if (keyCode == RIGHT) {
+      xPos += 50;
+      createImage();
+    }
+  }
 }
 
 color getColor(float _i) {
@@ -91,4 +179,27 @@ color getColor(float _i) {
     i = 0;
   }
   return colori.get(i);
+}
+
+void changePalette() {
+  colori.clear();
+  for (int i = 0; i < 4; i++) {
+    color c1 = color(hue(c), saturation(c) - (10*i), brightness(c));
+    colori.append(c1);
+  }
+}
+
+// SELECT FOLDER
+void folderSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    path = selection.getAbsolutePath() + "/";
+    filenames = listFileNames(path);
+    if (filenames.length == 0) {
+      exit();
+    } else {
+      createImage();
+    }
+  }
 }
