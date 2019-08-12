@@ -7,9 +7,13 @@
 PGraphics outputImage;
 
 // MUSICA:
-color c = color(233, 83, 78);
+// color c = color(233, 83, 78);
 // TECH:
 //color c = color(42, 178, 162);
+// DIPLOMI:
+//color c = color(15, 167, 219);
+// DIZIONE:
+color c = color(134, 110, 174);
 // Creo un'IntList per creare le palette dei colori e per poterle riordinare
 IntList colori = new IntList();
 
