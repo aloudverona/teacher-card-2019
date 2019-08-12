@@ -46,11 +46,11 @@ void draw() {
 }
 
 void createImage() {
-  if (filenames.length == 0 || avanzamento >= filenames.length) {
+  if (filenames.length == 0 || avanzamento >= filenames.length -1) {
     exit();
   }
-  println(width);
-  println(height);
+  println("W: " + width);
+  println("H: " + height);
   background(255);
   PImage img;
   img = loadImage(path + filenames[avanzamento]);
@@ -155,7 +155,8 @@ void keyPressed() {
     saveFrame(sketchPath()+"/output/" + width*2 + "_" + height*2+"_"+ filenames[avanzamento]);
   }
   if (key == 'i') { 
-    surface.setSize(270, 480);
+    surface.setSize(1080/2, 1920/2);
+    createImage();
   }
   if (key == 'f') {
     surface.setSize(600, 600);
